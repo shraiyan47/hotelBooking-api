@@ -45,20 +45,24 @@ export const getHotel = async (req, res, next) => {
 }
 
 export const getAllHotel = async (req, res, next) => {
-    const {min, max, ...others } = req.query; 
-    const baal = Number(req.query.limits) 
-    console.log("limits type =>", typeof baal)
-    console.log("limits =>",  baal)
+    const { min, max, ...others } = req.query;
+    let limit = parseInt(req.query.limit, 10);
+
+    console.log("limits type =>", typeof limit)
+    console.log("limits =>", limit)
     try {
         const allHotel = await Hotel.find({
             ...others,
-            cheepestPrice: {$gte: Number(min) || 1, $lte: Number(max) || 9999 },
-        }).limit(baal); 
-        console.log("HOTELS ->>",allHotel)
+            cheepestPrice: { $gte: Number(min) || 1, $lte: Number(max) || 999999 },
+        });
+
+        console.log("HOTELS ->>", allHotel)
+        
         res.status(200).json(allHotel)
     } catch (err) {
         next(err)
     }
+
 }
 
 export const countByCity = async (req, res, next) => {
